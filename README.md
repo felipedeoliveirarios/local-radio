@@ -8,6 +8,8 @@ Rádio local colaborativa. Qualquer pessoa na rede pode adicionar músicas do Yo
 - Back-end baixa o áudio, gera narração TTS e reproduz localmente
 - Narração com variações de texto e voz neural em pt-BR (edge-tts)
 - Extração inteligente de artista/título dos metadados do vídeo
+- Pré-download da próxima música pra transição suave entre faixas
+- QR code pra compartilhar acesso com quem estiver na mesma rede
 
 ## Requisitos
 
@@ -17,10 +19,19 @@ Rádio local colaborativa. Qualquer pessoa na rede pode adicionar músicas do Yo
 ## Rodando
 
 ```bash
-docker compose up --build
+./start.sh --build
 ```
 
-Acesse `http://localhost:8080`.
+O script detecta o IP da rede local automaticamente e exibe:
+
+```
+📻 Local Radio
+   URL:   http://192.168.x.x:8080
+   Admin: http://192.168.x.x:8080/#/admin (token: changeme)
+   QR:    http://192.168.x.x:8080/#/qr
+```
+
+Se tiver `qrencode` instalado (`sudo apt install qrencode`), exibe o QR code direto no terminal.
 
 O áudio sai pelas caixas da máquina que roda o Docker.
 
@@ -35,8 +46,12 @@ Acesse `http://localhost:8080/#/admin` pra controlar a rádio:
 O token padrão é `changeme`. Pra personalizar:
 
 ```bash
-ADMIN_TOKEN=minhaSenha docker compose up --build
+ADMIN_TOKEN=minhaSenha ./start.sh --build
 ```
+
+## QR Code
+
+Acesse `http://localhost:8080/#/qr` pra exibir um QR code fullscreen — ideal pra projetar num monitor ou TV.
 
 ## Stack
 
@@ -53,12 +68,13 @@ ADMIN_TOKEN=minhaSenha docker compose up --build
 
 ```
 ├── docker-compose.yml
+├── start.sh               # Script de inicialização
 ├── backend/
 │   ├── Dockerfile
 │   ├── pyproject.toml / uv.lock
 │   ├── main.py            # API FastAPI
 │   ├── music_queue.py     # Fila thread-safe
-│   ├── player.py          # Loop de reprodução
+│   ├── player.py          # Loop de reprodução + prefetch
 │   ├── downloader.py      # Download + extração de metadados
 │   ├── narrator.py        # Geração de narração TTS
 │   └── templates.py       # Variações de locução
@@ -70,7 +86,8 @@ ADMIN_TOKEN=minhaSenha docker compose up --build
         └── components/
             ├── SubmitForm.vue
             ├── QueueView.vue
-            └── AdminPanel.vue
+            ├── AdminPanel.vue
+            └── QrPage.vue
 ```
 
 ## Configuração

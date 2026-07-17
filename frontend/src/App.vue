@@ -3,6 +3,7 @@ import { ref, onMounted } from "vue";
 import SubmitForm from "./components/SubmitForm.vue";
 import QueueView from "./components/QueueView.vue";
 import AdminPanel from "./components/AdminPanel.vue";
+import QrPage from "./components/QrPage.vue";
 
 const dark = ref(true);
 const route = ref(window.location.hash);
@@ -30,6 +31,9 @@ onMounted(() => {
   <div class="app">
     <template v-if="route === '#/admin'">
       <AdminPanel />
+    </template>
+    <template v-else-if="route === '#/qr'">
+      <QrPage />
     </template>
     <template v-else>
       <header>

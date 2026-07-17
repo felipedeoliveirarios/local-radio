@@ -52,6 +52,11 @@ class MusicQueue:
                 return True
             return False
 
+    def peek(self) -> QueueItem | None:
+        """Retorna o próximo item sem removê-lo, ou None se vazio."""
+        with self._lock:
+            return self._queue[0] if self._queue else None
+
     @property
     def now_playing(self) -> QueueItem | None:
         with self._lock:

@@ -189,3 +189,8 @@ async def get_qrcode():
 
     from fastapi.responses import Response
     return Response(content=svg, media_type="image/svg+xml")
+
+
+@app.get("/qrcode-url")
+async def get_qrcode_url():
+    return {"url": f"http://{_get_host_ip()}:8080"}
