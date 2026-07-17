@@ -41,6 +41,10 @@ onMounted(() => {
       <div class="columns">
         <div class="col-left">
           <SubmitForm />
+          <div class="qr-section">
+            <p class="qr-label">Escaneie pra acessar:</p>
+            <img :src="'/qrcode'" alt="QR Code" class="qr-code" />
+          </div>
         </div>
         <div class="col-right">
           <QueueView />
@@ -137,5 +141,29 @@ h1 {
   .columns {
     grid-template-columns: 1fr;
   }
+}
+
+.qr-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background: var(--surface);
+  border-radius: 6px;
+}
+
+.qr-label {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.qr-code {
+  width: 160px;
+  height: 160px;
+  border-radius: 4px;
+  background: #fff;
+  padding: 8px;
 }
 </style>

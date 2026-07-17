@@ -126,6 +126,11 @@ onMounted(() => {
           </li>
         </ul>
       </div>
+
+      <div class="qr-section">
+        <p class="qr-label">Escaneie pra acessar:</p>
+        <img :src="'/qrcode'" alt="QR Code" class="qr-code" />
+      </div>
     </template>
   </div>
 </template>
@@ -266,5 +271,29 @@ li .artist { color: var(--primary); font-size: 0.8rem; }
 .btn-remove:hover {
   background: var(--error, #ff5555);
   color: #fff;
+}
+
+.qr-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background: var(--surface);
+  border-radius: 6px;
+}
+
+.qr-label {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.qr-code {
+  width: 160px;
+  height: 160px;
+  border-radius: 4px;
+  background: #fff;
+  padding: 8px;
 }
 </style>

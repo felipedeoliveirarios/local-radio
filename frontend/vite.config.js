@@ -9,6 +9,7 @@ export default defineConfig({
       "/queue": "http://localhost:8000",
       "/now-playing": "http://localhost:8000",
       "/admin": "http://localhost:8000",
+      "/qrcode": "http://localhost:8000",
     },
   },
 });

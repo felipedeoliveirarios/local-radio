@@ -5,6 +5,7 @@ services:
     environment:
       - PULSE_SERVER=unix:/run/user/1000/pulse/native
       - ADMIN_TOKEN=${ADMIN_TOKEN:-changeme}
+      - HOST_IP=${HOST_IP}
     volumes:
       - /run/user/1000/pulse:/run/user/1000/pulse
     user: "${UID:-1000}:${GID:-1000}"

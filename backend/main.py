@@ -151,3 +151,41 @@ async def admin_remove(position: int, authorization: str | None = Header(default
     if music_queue.remove(position):
         return StatusResponse(ok=True, message=f"Item {position} removido da fila")
     return StatusResponse(ok=False, message=f"Posição {position} não encontrada")
+
+
+# --- QR Code ---
+
+
+def _get_host_ip() -> str:
+    """Retorna IP do host na rede local."""
+    import socket
+    # Env var passada pelo compose (funciona no Docker)
+    ip = os.environ.get("HOST_IP", "")
+    if ip:
+        return ip
+    # Fallback: detecção direta (funciona fora do Docker)
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(("8.8.8.8", 80))
+        ip = s.getsockname()[0]
+        s.close()
+        return ip
+    except Exception:
+        return "127.0.0.1"
+
+
+@app.get("/qrcode")
+async def get_qrcode():
+    import io
+    import qrcode
+    import qrcode.image.svg
+
+    url = f"http://{_get_host_ip()}:8080"
+
+    img = qrcode.make(url, image_factory=qrcode.image.svg.SvgPathImage)
+    buf = io.BytesIO()
+    img.save(buf)
+    svg = buf.getvalue()
+
+    from fastapi.responses import Response
+    return Response(content=svg, media_type="image/svg+xml")
