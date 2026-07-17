@@ -81,7 +81,8 @@ class Player:
                 audio_path = download_audio(item.url)
 
                 # Narração
-                text = pick_template(item.track, item.artist, item.requester)
+                narration_artist = item.artist if item.artist_confident else None
+                text = pick_template(item.track, narration_artist, item.requester)
                 narration_path = generate_narration(text)
                 self._play_file(narration_path)
 

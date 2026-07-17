@@ -16,6 +16,7 @@ class VideoInfo:
     track: str
     artist: str
     title: str  # título original completo
+    artist_confident: bool  # True se artist veio de metadados ou match com canal
 
 
 def _sanitize_url(url: str) -> str:
@@ -48,6 +49,7 @@ def _extract_track_artist(info: dict) -> VideoInfo:
     """Extrai track e artist dos metadados. Fallback: título e canal."""
     track = info.get("track") or ""
     artist = info.get("artist") or ""
+    confident = bool(track or artist)  # metadados nativos → confiável
 
     title = info.get("title", "Sem título")
     channel = info.get("channel") or info.get("uploader") or ""
@@ -61,21 +63,27 @@ def _extract_track_artist(info: dict) -> VideoInfo:
 
             # Usa o canal pra decidir qual lado é o artista
             channel_lower = channel.lower()
-            if channel_lower and channel_lower in right.lower():
-                # Canal aparece no lado direito → direito é artista
-                artist = artist or right
-                track = left
-            else:
-                # Padrão: lado esquerdo é artista (caso mais comum)
+            left_lower = left.lower()
+            right_lower = right.lower()
+
+            if channel_lower and channel_lower in left_lower:
                 artist = artist or left
                 track = right
+                confident = True
+            elif channel_lower and channel_lower in right_lower:
+                artist = artist or right
+                track = left
+                confident = True
+            else:
+                # Sem pista do canal — não splittar, manter título inteiro
+                track = title
         else:
             track = title
 
     if not artist:
         artist = channel
 
-    return VideoInfo(track=track, artist=artist, title=title)
+    return VideoInfo(track=track, artist=artist, title=title, artist_confident=confident)
 
 
 def get_video_info(url: str) -> VideoInfo:

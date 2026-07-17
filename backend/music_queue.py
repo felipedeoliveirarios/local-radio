@@ -12,6 +12,7 @@ class QueueItem:
     track: str
     artist: str
     requester: str | None
+    artist_confident: bool = True
     added_at: datetime = field(default_factory=datetime.now)
 
 

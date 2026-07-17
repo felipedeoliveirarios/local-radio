@@ -69,7 +69,8 @@ ADMIN_TOKEN=minhaSenha docker compose up --build
         ├── App.vue
         └── components/
             ├── SubmitForm.vue
-            └── QueueView.vue
+            ├── QueueView.vue
+            └── AdminPanel.vue
 ```
 
 ## Configuração

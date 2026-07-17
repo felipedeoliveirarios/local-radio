@@ -96,7 +96,7 @@ async def add_to_queue(body: AddRequest):
     except Exception as exc:
         raise HTTPException(status_code=400, detail=f"Não foi possível obter o vídeo: {exc}")
 
-    item = QueueItem(url=body.url, track=info.track, artist=info.artist, requester=body.requester or None)
+    item = QueueItem(url=body.url, track=info.track, artist=info.artist, requester=body.requester or "Ouvinte Anônimo", artist_confident=info.artist_confident)
     position = music_queue.enqueue(item)
     return AddResponse(track=info.track, artist=info.artist, position=position)
 
